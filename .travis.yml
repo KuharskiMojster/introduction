@@ -6,14 +6,12 @@ env:
   global:
   - REGISTRY_USER=rsosem
   - DOCKER_IMAGE=introduction:1.0.0-SNAPSHOT-$TRAVIS_JOB_NUMBER
-  - DOCKER_IMAGE_FULL_PATH=kuharskimojster/introduction
   - secure: "HdohHZhphak1JFCPUVe7/N1CQwNzWhf0SiGtLoxuCyTs98byyGlZgLnXN9kNDQ9pjZpkDCdPH04ZoyqXGp6UEqazvg6WqETONcjj3cyKiY0b/EHUnvZ4hu+5C1lH4A9T/F0kJjwOa7nbOR/v8VSekVWqLi3jXH1xmbObfEh+HXnR7jWLZRgQj2lX+1yS/DeG6AjUpbKNIY2A2F1n7Lqv/jdWGwyRdyWzIKBDrCFBpG3w4+q8OboQlQzPlwk/ukT+H4FdSl9u7xWAyWFBcGO4JLNmrmWRAnB+rz4BqtrlsWj/3XKZyQDw3EYnHW3IB7tWPk5qwFRr5JT8GBHb1ONnD8TNBU41PvHjp4SRYUgT66tGbWQMF+T/IZDSxJBN3MK/w+7BfeP12QR0XEnA25GWx1+/hfmJduEj4xrr06m6QovuJOK0gii6vt9orfq1KHZvbbXAcSsIVi3dY7rK357fsBf85VicInC1KwvXhiBWMjbrNYrHnGrpOdUhZSRYRkxVM44qnvKsPDVpulNakKot8chn/h+eRFh4iS2CzO23y/MOSucZFTsXYCiBicoqHdkjce4M7ZASCvjsxCJplN8Z/HKdmmmzmqN0XzvaEyv9wGgkEcXXwbR7BW1/N01RlJlsqXS4VhLa/O4iljOebcBzr5rthjd0OBNAOrLseMn68yo="
 script:
 - mvn clean package -U
 - docker build -t "$DOCKER_IMAGE" .
 after_install:
 - docker images
-before_deploy:
-- docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
 after_success:
+- echo "$REGISTRY_PASS" | docker login -u "$REGISTRY_USER" --password-stdin
 - docker push "$DOCKER_IMAGE"
